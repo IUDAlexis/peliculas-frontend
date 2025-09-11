@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Barra de navegación y Home
-import Navbar from "./app/shared/components/Navbar";
+// Layout y Home
+import Layout from "./app/shared/components/Layout";
 import Home from "./app/shared/components/Home";
 
 // Módulos
@@ -19,11 +19,7 @@ import MediaForm from "./app/modules/media/pages/MediaForm";
 export default function AppRoutes() {
   return (
     <Router>
-      {/* Barra de navegación */}
-      <Navbar />
-
-      {/* Contenido dinámico */}
-      <div style={{ padding: "20px" }}>
+      <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
 
@@ -47,7 +43,7 @@ export default function AppRoutes() {
           <Route path="/media" element={<MediaList />} />
           <Route path="/media/nuevo" element={<MediaForm />} />
         </Routes>
-      </div>
+      </Layout>
     </Router>
   );
 }
