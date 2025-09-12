@@ -105,10 +105,10 @@ export default function ProductoraList() {
               </span>
             </div>
           </div>
-          <div className="col-12 col-md-4 d-flex justify-content-md-end">
+          <div className="col-12 col-md-4 d-flex justify-content-start">
             <button
               onClick={handleNuevo}
-              className="btn productoras-btn d-flex align-items-center gap-2 w-100 w-md-auto"
+              className="btn btn-primary d-flex align-items-left gap-2  w-md-auto"
             >
               <span>➕</span>
               <span className="d-none d-sm-inline">Crear productora</span>
