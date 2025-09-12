@@ -187,7 +187,7 @@ export default function GeneroForm({ genero, onClose }) {
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-danger"
               onClick={onClose}
               disabled={loading}
             >
@@ -195,7 +195,7 @@ export default function GeneroForm({ genero, onClose }) {
             </button>
             <button
               type="submit"
-              className="btn generos-btn"
+              className="btn btn-primary generos-btn"
               disabled={loading}
               onClick={handleSubmit}
             >

@@ -186,7 +186,7 @@ export default function TipoForm({ tipo, onClose }) {
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-danger"
               onClick={onClose}
               disabled={loading}
             >
@@ -194,7 +194,7 @@ export default function TipoForm({ tipo, onClose }) {
             </button>
             <button
               type="submit"
-              className="btn tipos-btn"
+              className="btn btn-primary tipos-btn"
               disabled={loading}
               onClick={handleSubmit}
             >
