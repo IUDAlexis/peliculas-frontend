@@ -233,6 +233,8 @@ body {
   --tipos-color: #9b59b6;
   --generos-color: #e74c3c;
   --productoras-color: #2ecc71;
+  --media-color: #f39c12;
+  --directores-color: #16a085;
   --total-color: #3498db;
   --text-dark: #2c3e50;
   --text-muted: #7f8c8d;
@@ -248,6 +250,12 @@ body {
 .productoras-color {
   color: var(--productoras-color) !important;
 }
+.media-color {
+  color: var(--media-color) !important;
+}
+.directores-color {
+  color: var(--directores-color) !important;
+}
 .total-color {
   color: var(--total-color) !important;
 }
@@ -262,6 +270,12 @@ body {
 .border-productoras {
   border-top: 4px solid var(--productoras-color) !important;
 }
+.border-media {
+  border-top: 4px solid var(--media-color) !important;
+}
+.border-directores {
+  border-top: 4px solid var(--directores-color) !important;
+}
 .border-total {
   border-top: 4px solid var(--total-color) !important;
 }
@@ -275,6 +289,12 @@ body {
 }
 .productoras-bg {
   background-color: var(--productoras-color) !important;
+}
+.media-bg {
+  background-color: var(--media-color) !important;
+}
+.directores-bg {
+  background-color: var(--directores-color) !important;
 }
 .total-bg {
   background-color: var(--total-color) !important;
