@@ -1,28 +1,75 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { obtenerGeneros } from '../../services/generoServices';
+import { obtenerTipos } from '../../services/tipoServices';
 
 export default function Home() {
+  const [stats, setStats] = useState({
+    peliculas: 0,
+    series: 0,
+    generos: 0,
+    tipos: 0,
+    productoras: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
+
+  const cargarDatos = async () => {
+    try {
+      setLoading(true);
+      
+      // Cargar datos en paralelo
+      const [generosData, tiposData] = await Promise.all([
+        obtenerGeneros().catch(() => []),
+        obtenerTipos().catch(() => [])
+      ]);
+
+      // Filtrar solo activos
+      const generosActivos = generosData.filter(g => g.estado !== 'Inactivo');
+      const tiposActivos = tiposData.filter(t => t.estado !== 'Inactivo');
+
+      // Contar tipos específicos
+      const peliculas = tiposActivos.filter(t => 
+        t.nombre.toLowerCase().includes('película') || 
+        t.nombre.toLowerCase().includes('pelicula')
+      ).length;
+      
+      const series = tiposActivos.filter(t => 
+        t.nombre.toLowerCase().includes('serie')
+      ).length;
+
+      setStats({
+        peliculas: peliculas > 0 ? peliculas : tiposActivos.length, // Fallback al total si no hay tipos específicos
+        series: series,
+        generos: generosActivos.length,
+        tipos: tiposActivos.length,
+        productoras: 0 // Pendiente implementar
+      });
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const statsCards = [
-    { title: "Películas", count: "1200", color: "#3498db" },
-    { title: "Series", count: "800", color: "#9b59b6" },
-    { title: "Géneros", count: "20", color: "#e74c3c" },
-    { title: "Productoras", count: "50", color: "#2ecc71" }
+    { title: "Tipos", count: loading ? "..." : stats.tipos.toString(), colorClass: "tipos-color", borderClass: "border-tipos" },
+    { title: "Géneros", count: loading ? "..." : stats.generos.toString(), colorClass: "generos-color", borderClass: "border-generos" },
+    { title: "Productoras", count: loading ? "..." : "0", colorClass: "productoras-color", borderClass: "border-productoras" },
+    { title: "Total Activos", count: loading ? "..." : (stats.tipos + stats.generos).toString(), colorClass: "total-color", borderClass: "border-total" }
   ];
 
   const quickAccessItems = [
     {
-      title: "Gestionar Películas",
-      description: "Añadir, editar o eliminar películas de la base de datos.",
-      link: "/media",
-      category: "PELÍCULAS",
-      color: "#3498db",
-      icon: "🎬"
-    },
-    {
-      title: "Gestionar Series",
-      description: "Añadir, editar o eliminar series de la base de datos.",
-      link: "/media",
-      category: "SERIES", 
-      color: "#9b59b6",
+      title: "Gestionar Tipos",
+      description: "Añadir, editar o eliminar tipos de contenido audiovisual.",
+      link: "/tipos",
+      category: "TIPOS",
+      colorClass: "tipos-bg",
+      categoryColorClass: "tipos-color",
       icon: "📺"
     },
     {
@@ -30,7 +77,8 @@ export default function Home() {
       description: "Añadir, editar o eliminar géneros de la base de datos.",
       link: "/generos",
       category: "GÉNEROS",
-      color: "#2ecc71",
+      colorClass: "generos-bg",
+      categoryColorClass: "generos-color",
       icon: "🎭"
     },
     {
@@ -38,80 +86,63 @@ export default function Home() {
       description: "Añadir, editar o eliminar productoras de la base de datos.",
       link: "/productoras",
       category: "PRODUCTORAS",
-      color: "#e67e22",
+      colorClass: "productoras-bg",
+      categoryColorClass: "productoras-color",
       icon: "🏢"
+    },
+    {
+      title: "Gestionar Medios",
+      description: "Administrar películas, series y demás contenido audiovisual.",
+      link: "/media",
+      category: "MEDIOS",
+      colorClass: "total-bg",
+      categoryColorClass: "total-color",
+      icon: "🎬"
     }
   ];
 
-  const cardStyle = {
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    padding: "1.5rem",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-    margin: "1rem",
-    minWidth: "200px",
-    textAlign: "center",
-    border: "1px solid #e1e8ed"
-  };
-
-  const quickAccessStyle = {
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    padding: "1.5rem",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-    margin: "1rem",
-    textDecoration: "none",
-    color: "inherit",
-    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-    display: "block",
-    border: "1px solid #e1e8ed"
-  };
-
   return (
-    <div>
-      <header style={{ marginBottom: "2rem" }}>
-        <h1 style={{ 
-          fontSize: "2.5rem", 
-          fontWeight: "600", 
-          color: "#2c3e50", 
-          marginBottom: "0.5rem" 
-        }}>
-          Panel de Control
-        </h1>
+    <div className="container-fluid">
+      {/* Header */}
+      <header className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+          <h1 className="display-4 fw-bold text-dark mb-2">
+            Panel de Control
+          </h1>
+          <p className="text-muted mb-0 fs-6">
+            {loading ? "Cargando estadísticas..." : "Estadísticas actualizadas en tiempo real"}
+          </p>
+        </div>
+        <button
+          onClick={cargarDatos}
+          className={`btn btn-secondary d-flex align-items-center gap-2 ${loading ? 'disabled' : ''}`}
+          disabled={loading}
+        >
+          🔄 {loading ? 'Actualizando...' : 'Actualizar'}
+        </button>
       </header>
 
       {/* Stats Cards */}
-      <section style={{ marginBottom: "3rem" }}>
-        <div style={{ 
-          display: "flex", 
-          flexWrap: "wrap", 
-          gap: "1rem",
-          justifyContent: "space-between" 
-        }}>
+      <section className="mb-5">
+        <div className="row g-3">
           {statsCards.map((stat, index) => (
-            <div key={index} style={{
-              ...cardStyle,
-              borderTop: `4px solid ${stat.color}`,
-              flex: "1",
-              minWidth: "200px"
-            }}>
-              <h3 style={{ 
-                margin: "0 0 0.5rem 0", 
-                color: "#7f8c8d", 
-                fontSize: "1rem",
-                textTransform: "uppercase",
-                fontWeight: "500"
-              }}>
-                {stat.title}
-              </h3>
-              <p style={{ 
-                margin: "0", 
-                fontSize: "2.5rem", 
-                fontWeight: "600", 
-                color: stat.color 
-              }}>
-                {stat.count}
-              </p>
+            <div key={index} className="col-12 col-md-6 col-lg-3">
+              <div className={`card h-100 text-center stat-card ${stat.borderClass} ${loading ? 'loading' : ''}`}>
+                <div className="card-body">
+                  <h3 className="card-subtitle mb-3 text-muted text-uppercase fw-medium small">
+                    {stat.title}
+                  </h3>
+                  <p className={`card-text display-4 fw-bold mb-0 ${stat.colorClass} d-flex align-items-center justify-content-center`} style={{ minHeight: '3rem' }}>
+                    {loading ? (
+                      <span className="loading-dots">
+                        •••
+                      </span>
+                    ) : (
+                      stat.count
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -119,78 +150,38 @@ export default function Home() {
 
       {/* Quick Access */}
       <section>
-        <h2 style={{ 
-          fontSize: "1.8rem", 
-          fontWeight: "600", 
-          color: "#2c3e50",
-          marginBottom: "1.5rem"
-        }}>
+        <h2 className="h2 fw-bold text-dark mb-4">
           Accesos Rápidos
         </h2>
         
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "1.5rem"
-        }}>
+        <div className="row g-4">
           {quickAccessItems.map((item, index) => (
-            <Link 
-              key={index}
-              to={item.link}
-              style={quickAccessStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,0.1)";
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "flex-start" }}>
-                <div style={{
-                  width: "60px",
-                  height: "60px",
-                  backgroundColor: item.color,
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.5rem",
-                  marginRight: "1rem",
-                  flexShrink: 0
-                }}>
-                  {item.icon}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{
-                    fontSize: "0.75rem",
-                    color: item.color,
-                    fontWeight: "600",
-                    textTransform: "uppercase",
-                    marginBottom: "0.5rem"
-                  }}>
-                    {item.category}
+            <div key={index} className="col-12 col-lg-6">
+              <Link 
+                to={item.link}
+                className="card text-decoration-none h-100 quick-access-card"
+              >
+                <div className="card-body">
+                  <div className="d-flex align-items-start">
+                    <div className={`rounded-3 d-flex align-items-center justify-content-center flex-shrink-0 me-3 ${item.colorClass}`} 
+                         style={{ width: '60px', height: '60px', fontSize: '1.5rem' }}>
+                      {item.icon}
+                    </div>
+                    <div className="flex-grow-1">
+                      <div className={`small fw-bold text-uppercase mb-2 ${item.categoryColorClass}`}>
+                        {item.category}
+                      </div>
+                      <h3 className="h5 fw-bold text-dark mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-muted mb-0 small lh-sm">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                  <h3 style={{
-                    margin: "0 0 0.5rem 0",
-                    fontSize: "1.2rem",
-                    fontWeight: "600",
-                    color: "#2c3e50"
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{
-                    margin: "0",
-                    color: "#7f8c8d",
-                    fontSize: "0.9rem",
-                    lineHeight: "1.4"
-                  }}>
-                    {item.description}
-                  </p>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           ))}
         </div>
       </section>
