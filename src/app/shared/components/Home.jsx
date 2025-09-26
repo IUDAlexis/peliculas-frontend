@@ -168,7 +168,7 @@ export default function Home() {
       {/* Header */}
       <header className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-          <h1 className="display-4 fw-bold text-dark mb-2">Panel de Control</h1>
+          <h1 className="display-4 fw-bold text-dark mb-2">Stream Legal</h1>
           <p className="text-muted mb-0 fs-6">
             {loading
               ? "Cargando estadísticas..."

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:4000/api/v1/directores';
+const API_URL = `${import.meta.env.VITE_API_URL}directores`;
 
 // Obtener todos los directores
 export const obtenerDirectores = async () => {

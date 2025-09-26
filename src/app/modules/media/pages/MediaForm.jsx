@@ -57,7 +57,8 @@ export default function MediaForm({ media, onClose }) {
         obtenerTipos(),
       ]);
       setGeneros(gen);
-      setDirectores(dir);
+      // Filtrar solo directores activos
+      setDirectores(dir.filter((director) => director.estado === "Activo"));
       setProductoras(prod);
       setTipos(tip);
     } catch (err) {
@@ -67,12 +68,17 @@ export default function MediaForm({ media, onClose }) {
 
   const validarFormulario = () => {
     const nuevosErrores = {};
-    if (!formData.serial.trim()) nuevosErrores.serial = "El serial es obligatorio";
-    if (!formData.titulo.trim()) nuevosErrores.titulo = "El título es obligatorio";
-    if (!formData.url_pelicula.trim()) nuevosErrores.url_pelicula = "La URL es obligatoria";
+    if (!formData.serial.trim())
+      nuevosErrores.serial = "El serial es obligatorio";
+    if (!formData.titulo.trim())
+      nuevosErrores.titulo = "El título es obligatorio";
+    if (!formData.url_pelicula.trim())
+      nuevosErrores.url_pelicula = "La URL es obligatoria";
     if (!formData.genero) nuevosErrores.genero = "Debe seleccionar un género";
-    if (!formData.director) nuevosErrores.director = "Debe seleccionar un director";
-    if (!formData.productora) nuevosErrores.productora = "Debe seleccionar una productora";
+    if (!formData.director)
+      nuevosErrores.director = "Debe seleccionar un director";
+    if (!formData.productora)
+      nuevosErrores.productora = "Debe seleccionar una productora";
     if (!formData.tipo) nuevosErrores.tipo = "Debe seleccionar un tipo";
 
     setErrors(nuevosErrores);
@@ -94,7 +100,9 @@ export default function MediaForm({ media, onClose }) {
       }
       onClose();
     } catch (err) {
-      setError(media ? "Error al actualizar la media" : "Error al crear la media");
+      setError(
+        media ? "Error al actualizar la media" : "Error al crear la media"
+      );
       console.error("Error al guardar la media", err);
     } finally {
       setLoading(false);
@@ -144,7 +152,9 @@ export default function MediaForm({ media, onClose }) {
                 <input
                   type="text"
                   name="serial"
-                  className={`form-control ${errors.serial ? "is-invalid" : ""}`}
+                  className={`form-control ${
+                    errors.serial ? "is-invalid" : ""
+                  }`}
                   value={formData.serial}
                   onChange={handleChange}
                   disabled={loading}
@@ -160,7 +170,9 @@ export default function MediaForm({ media, onClose }) {
                 <input
                   type="text"
                   name="titulo"
-                  className={`form-control ${errors.titulo ? "is-invalid" : ""}`}
+                  className={`form-control ${
+                    errors.titulo ? "is-invalid" : ""
+                  }`}
                   value={formData.titulo}
                   onChange={handleChange}
                   disabled={loading}
@@ -188,7 +200,9 @@ export default function MediaForm({ media, onClose }) {
                 <input
                   type="url"
                   name="url_pelicula"
-                  className={`form-control ${errors.url_pelicula ? "is-invalid" : ""}`}
+                  className={`form-control ${
+                    errors.url_pelicula ? "is-invalid" : ""
+                  }`}
                   value={formData.url_pelicula}
                   onChange={handleChange}
                   disabled={loading}
@@ -251,7 +265,9 @@ export default function MediaForm({ media, onClose }) {
                 <label className="form-label">Director</label>
                 <select
                   name="director"
-                  className={`form-select ${errors.director ? "is-invalid" : ""}`}
+                  className={`form-select ${
+                    errors.director ? "is-invalid" : ""
+                  }`}
                   value={formData.director}
                   onChange={handleChange}
                   disabled={loading}
@@ -273,7 +289,9 @@ export default function MediaForm({ media, onClose }) {
                 <label className="form-label">Productora</label>
                 <select
                   name="productora"
-                  className={`form-select ${errors.productora ? "is-invalid" : ""}`}
+                  className={`form-select ${
+                    errors.productora ? "is-invalid" : ""
+                  }`}
                   value={formData.productora}
                   onChange={handleChange}
                   disabled={loading}

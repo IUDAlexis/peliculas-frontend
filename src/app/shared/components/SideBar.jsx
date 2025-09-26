@@ -17,7 +17,7 @@ export default function SideBar({ isOffcanvas = false }) {
     <div className="d-flex flex-column h-100">
       {/* Header */}
       <div className="border-bottom p-3 mb-3">
-        <h2 className="h4 fw-semibold text-dark mb-0">Panel de Control</h2>
+        <h2 className="h4 fw-semibold text-dark mb-0">Stream Legal</h2>
       </div>
 
       {/* Menu Items */}

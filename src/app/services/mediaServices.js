@@ -1,5 +1,5 @@
 // src/services/mediaServices.js
-const API_URL = 'http://localhost:4000/api/v1/media';
+const API_URL = `${import.meta.env.VITE_API_URL}media`;
 
 // Obtener todas las medias
 export const obtenerMedias = async () => {

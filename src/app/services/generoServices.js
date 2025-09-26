@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:4000/api/v1/generos';
+const API_URL = `${import.meta.env.VITE_API_URL}generos`;
 
 // Obtener todos los géneros
 export const obtenerGeneros = async () => {

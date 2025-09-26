@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
-import { obtenerGeneros, eliminarGenero } from '../../../services/generoServices';
-import GeneroForm from './GeneroForm';
-import './Genero.css';
+import { useState, useEffect } from "react";
+import {
+  obtenerGeneros,
+  eliminarGenero,
+} from "../../../services/generoServices";
+import GeneroForm from "./GeneroForm";
+import "./Genero.css";
 
 export default function GeneroList() {
   const [generos, setGeneros] = useState([]);
@@ -21,21 +24,21 @@ export default function GeneroList() {
       const data = await obtenerGeneros();
       setGeneros(data);
     } catch (err) {
-      setError('Error al cargar los géneros');
-      console.error('Error:', err);
+      setError("Error al cargar los géneros");
+      console.error("Error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleEliminar = async (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este género?')) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este género?")) {
       try {
         await eliminarGenero(id);
         await cargarGeneros(); // Recargar la lista
       } catch (err) {
-        setError('Error al eliminar el género');
-        console.error('Error:', err);
+        setError("Error al eliminar el género");
+        console.error("Error:", err);
       }
     }
   };
@@ -57,16 +60,19 @@ export default function GeneroList() {
   };
 
   const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString('es-ES');
+    return new Date(fecha).toLocaleDateString("es-ES");
   };
 
-  const generosFiltrados = mostrarInactivos 
-    ? generos 
-    : generos.filter(genero => genero.estado !== 'Inactivo');
+  const generosFiltrados = mostrarInactivos
+    ? generos
+    : generos.filter((genero) => genero.estado !== "Inactivo");
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "200px" }}
+      >
         <div className="text-center">
           <div className="spinner-border text-secondary mb-3" role="status">
             <span className="visually-hidden">Cargando...</span>
@@ -98,15 +104,16 @@ export default function GeneroList() {
                 className="btn btn-outline-secondary btn-sm"
               >
                 <span className="d-none d-sm-inline">
-                  {mostrarInactivos ? 'Ocultar inactivos' : 'Mostrar inactivos'}
+                  {mostrarInactivos ? "Ocultar inactivos" : "Mostrar inactivos"}
                 </span>
                 <span className="d-sm-none">
-                  {mostrarInactivos ? 'Ocultar' : 'Mostrar'} inactivos
+                  {mostrarInactivos ? "Ocultar" : "Mostrar"} inactivos
                 </span>
               </button>
               <span className="text-muted small">
                 <span className="d-none d-sm-inline">Total: </span>
-                {generosFiltrados.length} género{generosFiltrados.length !== 1 ? 's' : ''}
+                {generosFiltrados.length} género
+                {generosFiltrados.length !== 1 ? "s" : ""}
               </span>
             </div>
           </div>
@@ -115,8 +122,9 @@ export default function GeneroList() {
               onClick={handleNuevo}
               className="btn generos-btn d-flex align-items-center gap-2 w-100 w-md-auto"
             >
-              <span>➕</span>
-              <button className="btn btn-primary d-none d-sm-inline">Crear género</button>
+              <button className="btn btn-primary d-none d-sm-inline">
+                <span>➕</span>Crear género
+              </button>
               <button className="btn btn-primary d-sm-none">Nuevo</button>
             </button>
           </div>
@@ -128,12 +136,24 @@ export default function GeneroList() {
             <table className="table table-hover">
               <thead className="table-light">
                 <tr>
-                  <th scope="col" className="fw-semibold text-uppercase small">Nombre</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Estado</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Fecha de creación</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Fecha de actualización</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Descripción</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Acciones</th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Nombre
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Estado
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Fecha de creación
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Fecha de actualización
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Descripción
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -141,7 +161,13 @@ export default function GeneroList() {
                   <tr key={genero._id}>
                     <td className="fw-medium text-dark">{genero.nombre}</td>
                     <td>
-                      <span className={`badge rounded-pill ${genero.estado === 'Activo' ? 'text-bg-success' : 'text-bg-danger'}`}>
+                      <span
+                        className={`badge rounded-pill ${
+                          genero.estado === "Activo"
+                            ? "text-bg-success"
+                            : "text-bg-danger"
+                        }`}
+                      >
                         {genero.estado}
                       </span>
                     </td>
@@ -151,8 +177,11 @@ export default function GeneroList() {
                     <td className="text-muted">
                       {formatearFecha(genero.fecha_actualizacion)}
                     </td>
-                    <td style={{ maxWidth: '200px' }}>
-                      <span className="text-muted text-truncate d-inline-block" style={{ maxWidth: '180px' }}>
+                    <td style={{ maxWidth: "200px" }}>
+                      <span
+                        className="text-muted text-truncate d-inline-block"
+                        style={{ maxWidth: "180px" }}
+                      >
                         {genero.descripcion}
                       </span>
                     </td>
@@ -165,7 +194,7 @@ export default function GeneroList() {
                         >
                           ✏️
                         </button>
-                        {genero.estado === 'Activo' && (
+                        {genero.estado === "Activo" && (
                           <button
                             onClick={() => handleEliminar(genero._id)}
                             className="btn btn-outline-danger btn-sm"
@@ -189,10 +218,18 @@ export default function GeneroList() {
             <table className="table table-hover">
               <thead className="table-light">
                 <tr>
-                  <th scope="col" className="fw-semibold text-uppercase small">Nombre</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Estado</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Descripción</th>
-                  <th scope="col" className="fw-semibold text-uppercase small">Acciones</th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Nombre
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Estado
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Descripción
+                  </th>
+                  <th scope="col" className="fw-semibold text-uppercase small">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -200,12 +237,21 @@ export default function GeneroList() {
                   <tr key={genero._id}>
                     <td className="fw-medium text-dark">{genero.nombre}</td>
                     <td>
-                      <span className={`badge rounded-pill ${genero.estado === 'Activo' ? 'text-bg-success' : 'text-bg-danger'}`}>
+                      <span
+                        className={`badge rounded-pill ${
+                          genero.estado === "Activo"
+                            ? "text-bg-success"
+                            : "text-bg-danger"
+                        }`}
+                      >
                         {genero.estado}
                       </span>
                     </td>
-                    <td style={{ maxWidth: '150px' }}>
-                      <span className="text-muted text-truncate d-inline-block" style={{ maxWidth: '130px' }}>
+                    <td style={{ maxWidth: "150px" }}>
+                      <span
+                        className="text-muted text-truncate d-inline-block"
+                        style={{ maxWidth: "130px" }}
+                      >
                         {genero.descripcion}
                       </span>
                     </td>
@@ -218,7 +264,7 @@ export default function GeneroList() {
                         >
                           ✏️
                         </button>
-                        {genero.estado === 'Activo' && (
+                        {genero.estado === "Activo" && (
                           <button
                             onClick={() => handleEliminar(genero._id)}
                             className="btn btn-outline-danger btn-sm"
@@ -239,22 +285,43 @@ export default function GeneroList() {
         {/* Mobile Cards */}
         <div className="d-md-none">
           {generosFiltrados.map((genero) => (
-            <div key={genero._id} className="card mb-3 border-start border-3" style={{ borderLeftColor: genero.estado === 'Activo' ? '#198754' : '#dc3545' }}>
+            <div
+              key={genero._id}
+              className="card mb-3 border-start border-3"
+              style={{
+                borderLeftColor:
+                  genero.estado === "Activo" ? "#198754" : "#dc3545",
+              }}
+            >
               <div className="card-body p-3">
                 <div className="d-flex justify-content-between align-items-start mb-2">
-                  <h6 className="card-title fw-bold mb-0 text-dark">{genero.nombre}</h6>
-                  <span className={`badge rounded-pill ${genero.estado === 'Activo' ? 'text-bg-success' : 'text-bg-danger'}`}>
+                  <h6 className="card-title fw-bold mb-0 text-dark">
+                    {genero.nombre}
+                  </h6>
+                  <span
+                    className={`badge rounded-pill ${
+                      genero.estado === "Activo"
+                        ? "text-bg-success"
+                        : "text-bg-danger"
+                    }`}
+                  >
                     {genero.estado}
                   </span>
                 </div>
-                <p className="card-text text-muted small mb-2">{genero.descripcion}</p>
+                <p className="card-text text-muted small mb-2">
+                  {genero.descripcion}
+                </p>
                 <div className="row text-muted small mb-3">
                   <div className="col-6">
-                    <div><strong>Creado:</strong></div>
+                    <div>
+                      <strong>Creado:</strong>
+                    </div>
                     <div>{formatearFecha(genero.fecha_creacion)}</div>
                   </div>
                   <div className="col-6">
-                    <div><strong>Actualizado:</strong></div>
+                    <div>
+                      <strong>Actualizado:</strong>
+                    </div>
                     <div>{formatearFecha(genero.fecha_actualizacion)}</div>
                   </div>
                 </div>
@@ -265,7 +332,7 @@ export default function GeneroList() {
                   >
                     ✏️ Editar
                   </button>
-                  {genero.estado === 'Activo' && (
+                  {genero.estado === "Activo" && (
                     <button
                       onClick={() => handleEliminar(genero._id)}
                       className="btn btn-outline-danger btn-sm flex-grow-1"
@@ -278,24 +345,21 @@ export default function GeneroList() {
             </div>
           ))}
         </div>
-        
+
         {/* Empty state */}
         {generosFiltrados.length === 0 && (
           <div className="text-center py-5">
             <div className="text-muted fs-5">
-              {mostrarInactivos 
-                ? 'No hay géneros registrados' 
-                : 'No hay géneros activos'}
+              {mostrarInactivos
+                ? "No hay géneros registrados"
+                : "No hay géneros activos"}
             </div>
           </div>
         )}
 
         {/* Modal */}
         {showModal && (
-          <GeneroForm
-            genero={generoSeleccionado}
-            onClose={handleModalClose}
-          />
+          <GeneroForm genero={generoSeleccionado} onClose={handleModalClose} />
         )}
       </div>
     </div>

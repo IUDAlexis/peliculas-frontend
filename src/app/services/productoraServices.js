@@ -1,6 +1,6 @@
 // src/services/productoraServices.js
 
-const API_URL = 'http://localhost:4000/api/v1/productoras';
+const API_URL = `${import.meta.env.VITE_API_URL}productoras`;
 
 // Obtener todas las productoras
 export const obtenerProductoras = async () => {
